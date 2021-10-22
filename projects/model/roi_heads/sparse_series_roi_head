@@ -1,0 +1,36 @@
+import numpy as np
+import torch
+
+from mmdet.core import bbox2result, bbox2roi, bbox_xyxy_to_cxcywh
+from mmdet.models .builder import HEADS
+from mmdet.models.roi_heads import SparseRoIHead
+
+
+@HEADS.register_module()
+class SparseRoIHead(SparseRoIHead):
+     def _bbox_forward(self, stage, x, rois, object_feats, img_metas):
+
+        num_imgs = len(img_metas)
+        bbox_roi_extractor = self.bbox_roi_extractor[stage]
+        bbox_head = self.bbox_head[stage]
+        bbox_feats = bbox_roi_extractor(x[:bbox_roi_extractor.num_inputs],
+                                        rois)
+        cls_score, bbox_pred, object_feats = bbox_head(bbox_feats,
+                                                       object_feats)
+        proposal_list = self.bbox_head[stage].refine_bboxes(
+            rois,
+            rois.new_zeros(len(rois)),  # dummy arg
+            bbox_pred.view(-1, bbox_pred.size(-1)),
+            [rois.new_zeros(object_feats.size(1)) for _ in range(num_imgs)],
+            img_metas)
+        bbox_results = dict(
+            cls_score=cls_score,
+            decode_bbox_pred=torch.cat(proposal_list),
+            object_feats=object_feats,
+            # detach then use it in label assign
+            detach_cls_score_list=[
+                cls_score[i].detach() for i in range(num_imgs)
+            ],
+            detach_proposal_list=[item.detach() for item in proposal_list])
+
+        return bbox_results
