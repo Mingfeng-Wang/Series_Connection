@@ -83,10 +83,13 @@ def parse_args():
         warnings.warn('--options is deprecated in favor of --cfg-options')
         args.cfg_options = args.options
 
-    args.config = '/home/wmf/Documents/Github/mmdetection/projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_3stages_local.py'
+    args.config = '/media/wmf/E453334932D7B3C3/Github/mmdetection/projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_4stages_local_series.py'
+    args.work_dir = '/media/wmf/E453334932D7B3C3/workdir/sparse_rcnn_r34_fpn_1x_coco_4stages_series_local'
+    #args.config =  'E:\Github\mmdetection\projects\configs\sparse_rcnn_self\sparse_rcnn_r34_fpn_1x_coco_3stages_local_windows.py'
+    #args.work_dir = 'E:\workdir\debug'
     args.seed = 1334
     args.deterministic = True
-    args.work_dir = '/media/wmf/E453334932D7B3C3/workdir/sparse_rcnn_r34_fpn_1x_coco_3stages_local'
+    #args.gpu_ids = range(1,2)
     return args
 
 
