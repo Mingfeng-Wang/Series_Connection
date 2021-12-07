@@ -1,2 +1,2 @@
-python  projects/tools/train_debug.py
-shutdown -h 3
+python  projects/tools/train.py
+shutdown -h 5

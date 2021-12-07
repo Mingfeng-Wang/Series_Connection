@@ -100,8 +100,8 @@ def parse_args():
     if args.options:
         warnings.warn('--options is deprecated in favor of --eval-options')
         args.eval_options = args.options
-    args.config = '/media/wmf/E453334932D7B3C3/workdir/test/sparse_rcnn_r34_fpn_1x_coco_4stages_local.py'
-    args.checkpoint = '/media/wmf/E453334932D7B3C3/workdir/test/epoch_10.pth'
+    args.config = '/media/wmf/E453334932D7B3C3/workdir/test/sparse_rcnn_r34_fpn_1x_coco_4stages_local_series.py'
+    args.checkpoint = '/home/wmf/workdir/sparse_rcnn_r34_fpn_1x_coco_4stages_series_local/epoch_12.pth'
     args.eval = 'bbox'
     return args
 

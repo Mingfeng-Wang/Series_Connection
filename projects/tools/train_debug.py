@@ -1,5 +1,5 @@
 import sys
-sys.path.append("/home/wmf/Doucuments/Github/mmdetection/")
+sys.path.append("/home/wmf/Github/mmdetection/")
 
 import argparse
 import copy
@@ -83,10 +83,12 @@ def parse_args():
         warnings.warn('--options is deprecated in favor of --cfg-options')
         args.cfg_options = args.options
 
-    args.config = '/media/wmf/E453334932D7B3C3/Github/mmdetection/projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_4stages_local_series.py'
-    args.work_dir = '/media/wmf/E453334932D7B3C3/workdir/sparse_rcnn_r34_fpn_1x_coco_4stages_series_local'
-    #args.config =  'E:\Github\mmdetection\projects\configs\sparse_rcnn_self\sparse_rcnn_r34_fpn_1x_coco_3stages_local_windows.py'
-    #args.work_dir = 'E:\workdir\debug'
+    #args.config = '/media/wmf/E453334932D7B3C3/Github/mmdetection/projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_4stages_local_series.py'
+    #args.work_dir = '/media/wmf/E453334932D7B3C3/workdir/sparse_rcnn_r34_fpn_1x_coco_4stages_series_local'
+    args.config =  'projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_4stages_local_inconsistent.py'
+    #args.work_dir = '/media/wmf/E453334932D7B3C31/workdir/debug'
+    args.work_dir = 'workdir/sparse_rcnn_r34_fpn_1x_coco_4stages_local_inconsistent/'
+    args.resume_from = 'workdir/debug/epoch_2.pth'
     args.seed = 1334
     args.deterministic = True
     #args.gpu_ids = range(1,2)

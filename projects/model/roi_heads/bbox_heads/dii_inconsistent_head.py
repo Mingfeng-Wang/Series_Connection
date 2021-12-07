@@ -9,67 +9,7 @@ from mmdet.models.roi_heads.bbox_heads import DIIHead
 
 
 @HEADS.register_module()
-class DIISeriesHead(DIIHead):
-
-    @auto_fp16()
-    def forward(self, roi_feat, proposal_feat, final):
-        """Forward function of Dynamic Instance Interactive Head.
-
-        Args:
-            roi_feat (Tensor): Roi-pooling features with shape
-                (batch_size*num_proposals, feature_dimensions,
-                pooling_h , pooling_w).
-            proposal_feat (Tensor): Intermediate feature get from
-                diihead in last stage, has shape
-                (batch_size, num_proposals, feature_dimensions)
-
-          Returns:
-                tuple[Tensor]: Usually a tuple of classification scores
-                and bbox prediction and a intermediate feature.
-
-                    - cls_scores (Tensor): Classification scores for
-                      all proposals, has shape
-                      (batch_size, num_proposals, num_classes).
-                    - bbox_preds (Tensor): Box energies / deltas for
-                      all proposals, has shape
-                      (batch_size, num_proposals, 4).
-                    - obj_feat (Tensor): Object feature before classification
-                      and regression subnet, has shape
-                      (batch_size, num_proposal, feature_dimensions).
-        """
-        N, num_proposals = proposal_feat.shape[:2]
-
-        # Self attention
-        proposal_feat = proposal_feat.permute(1, 0, 2)
-        proposal_feat = self.attention_norm(self.attention(proposal_feat))
-
-        # instance interactive
-        proposal_feat = proposal_feat.permute(1, 0,
-                                              2).reshape(-1, self.in_channels)
-        proposal_feat_iic = self.instance_interactive_conv(
-            proposal_feat, roi_feat)
-        proposal_feat = proposal_feat + self.instance_interactive_conv_dropout(
-            proposal_feat_iic)
-        obj_feat = self.instance_interactive_conv_norm(proposal_feat)
-
-        # FFN
-        obj_feat = self.ffn_norm(self.ffn(obj_feat))
-    
-        cls_feat = obj_feat
-        if not final:
-            reg_feat = obj_feat
-            for reg_layer in self.reg_fcs:
-                reg_feat = reg_layer(reg_feat)
-            bbox_delta = self.fc_reg(reg_feat).view(N, num_proposals, -1)
-        else:
-            bbox_delta = None
-
-        for cls_layer in self.cls_fcs:
-            cls_feat = cls_layer(cls_feat)
-
-        cls_score = self.fc_cls(cls_feat).view(N, num_proposals, -1)
-
-        return cls_score, bbox_delta, obj_feat.view(N, num_proposals, -1)
+class DIIIconHead(DIIHead):
 
     @force_fp32(apply_to=('cls_score', 'bbox_pred'))
     def loss(self,
@@ -151,8 +91,4 @@ class DIISeriesHead(DIIHead):
                     bbox_targets[pos_inds.type(torch.bool)],
                     bbox_weights[pos_inds.type(torch.bool)],
                     avg_factor=avg_factor)
-            else:
-                losses['loss_bbox'] = bbox_pred.sum() * 0
-                losses['loss_iou'] = bbox_pred.sum() * 0
         return losses
-

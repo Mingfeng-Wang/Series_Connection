@@ -83,8 +83,8 @@ def parse_args():
         warnings.warn('--options is deprecated in favor of --cfg-options')
         args.cfg_options = args.options
 
-    args.config = '/media/wmf/E453334932D7B3C3/Github/mmdetection/projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_4stages_local.py'
-    args.work_dir = '/media/wmf/E453334932D7B3C3/workdir/sparse_rcnn_r34_fpn_1x_coco_4stages_local'
+    args.config = 'projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_6stages_local.py'
+    args.work_dir = '/media/wmf/E453334932D7B3C31/workdir/sparse_rcnn_r34_fpn_1x_coco_6stages_local'
     args.seed = 1334
     args.deterministic = True
     return args
