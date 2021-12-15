@@ -1,2 +1,1 @@
-python  projects/tools/train.py
-shutdown -h 5
+python  projects/tools/train.py --config 'projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_6stages_local_series.py' --work-dir 'workdir/sparse_rcnn_r34_fpn_1x_coco_6stages_local_series_detach0stage'

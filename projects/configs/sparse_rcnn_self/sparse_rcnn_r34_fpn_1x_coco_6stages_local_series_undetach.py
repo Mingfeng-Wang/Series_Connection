@@ -8,17 +8,17 @@ model = dict(
     type='SparseRCNN',
     backbone=dict(
         type='ResNet',
-        depth=50,
+        depth=34,
         num_stages=4,
         out_indices=(0, 1, 2, 3),
         frozen_stages=1,
         norm_cfg=dict(type='BN', requires_grad=True),
         norm_eval=True,
         style='pytorch',
-        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')),
+        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet34')),
     neck=dict(
         type='FPN',
-        in_channels=[256, 512, 1024, 2048],
+        in_channels=[64, 128, 256, 512],
         out_channels=256,
         start_level=0,
         add_extra_convs='on_input',
@@ -28,7 +28,7 @@ model = dict(
         num_proposals=num_proposals,
         proposal_feature_channel=256),
     roi_head=dict(
-        type='SparseSeriesRoIHead',
+        type='SparseSeriesRoIHeadUnDetach',
         num_stages=num_stages,
         stage_loss_weights=[1] * num_stages,
         proposal_feature_channel=256,
@@ -94,5 +94,5 @@ optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2))
 lr_config = dict(policy='step', step=[8, 11])
 runner = dict(type='EpochBasedRunner', max_epochs=12)
 # fp16 settings
-# fp16 = dict(loss_scale=512.)
-checkpoint_config = dict(interval=6)
+#fp16 = dict(loss_scale=512.)
+checkpoint_config = dict(interval=1)

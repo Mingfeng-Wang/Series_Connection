@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/datasets/coco_detectio_local.py',
+    '../_base_/datasets/coco_detection_8_local.py',
     '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
 ]
 num_stages = 6
@@ -89,7 +89,7 @@ model = dict(
 
 # optimizer
 optimizer = dict(_delete_=True, type='AdamW', lr=0.000025, weight_decay=0.0001)
-optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2))
+optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2), type='GradientCumulativeOptimizerHook', cumulative_iters=2)
 # learning policy
 lr_config = dict(policy='step', step=[8, 11])
 runner = dict(type='EpochBasedRunner', max_epochs=12)

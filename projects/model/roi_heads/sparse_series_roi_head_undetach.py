@@ -7,7 +7,7 @@ from mmdet.models.roi_heads import SparseRoIHead
 
 
 @HEADS.register_module()
-class SparseSeriesRoIHead(SparseRoIHead):
+class SparseSeriesRoIHeadUnDetach(SparseRoIHead):
 
     def _bbox_forward(self, stage, x, rois, object_feats, img_metas):
         """Box head forward function used in both training and testing. Returns
@@ -69,6 +69,7 @@ class SparseSeriesRoIHead(SparseRoIHead):
         bbox_results = dict(
             cls_score=cls_score,
             decode_bbox_pred=torch.cat(proposal_list),
+            undetach_proposal_list=proposal_list,
             object_feats=object_feats,
             # detach then use it in label assign
             detach_cls_score_list=[
@@ -122,14 +123,12 @@ class SparseSeriesRoIHead(SparseRoIHead):
         num_proposals = proposal_boxes.size(1)
         imgs_whwh = imgs_whwh.repeat(1, num_proposals, 1)
         all_stage_bbox_results = []
-        proposal_list = [proposal_boxes[i] for i in range(len(proposal_boxes))]
-        previous_decode_bbox_pred = torch.cat(proposal_list)
-        proposal_list = [proposal_boxes[i].detach() for i in range(len(proposal_boxes))]
-
+        #proposal_list = [proposal_boxes[i] for i in range(len(proposal_boxes))]
+        undetach_proposal_list = [proposal_boxes[i] for i in range(len(proposal_boxes))]
         object_feats = proposal_features
         all_stage_loss = {}
         for stage in range(self.num_stages):
-            rois = bbox2roi(proposal_list)
+            rois = bbox2roi(undetach_proposal_list)
             bbox_results = self._bbox_forward(stage, x, rois, object_feats,
                                               img_metas)
             all_stage_bbox_results.append(bbox_results)
@@ -138,9 +137,10 @@ class SparseSeriesRoIHead(SparseRoIHead):
                 gt_bboxes_ignore = [None for _ in range(num_imgs)]
             sampling_results = []
             cls_pred_list = bbox_results['detach_cls_score_list']
-            proposal_list = bbox_results['detach_proposal_list']
+            #proposal_list = bbox_results['detach_proposal_list']
+            undetach_proposal_list = bbox_results['undetach_proposal_list']
             for i in range(num_imgs):
-                unrefined_img_proposals = (rois[i*num_proposals: (i+1)*num_proposals, 1:])
+                unrefined_img_proposals = (rois[i*num_proposals: (i+1)*num_proposals, 1:]).detach()
                 assign_bbox = bbox_xyxy_to_cxcywh(unrefined_img_proposals /
                                                                 imgs_whwh[i])
                 assign_result = self.bbox_assigner[stage].assign(
@@ -154,6 +154,8 @@ class SparseSeriesRoIHead(SparseRoIHead):
                 True)
             cls_score = bbox_results['cls_score']
 
+            if stage == 0:
+                previous_decode_bbox_pred = rois[:,1:]
             single_stage_loss = self.bbox_head[stage].loss(
                 cls_score.view(-1, cls_score.size(-1)),
                 previous_decode_bbox_pred.view(-1, 4),
@@ -251,3 +253,21 @@ class SparseSeriesRoIHead(SparseRoIHead):
         ]
         return bbox_results
 
+    def aug_test(self, features, proposal_list, img_metas, rescale=False):
+        raise NotImplementedError('Sparse R-CNN does not support `aug_test`')
+
+    def forward_dummy(self, x, proposal_boxes, proposal_features, img_metas):
+        """Dummy forward function when do the flops computing."""
+        all_stage_bbox_results = []
+        proposal_list = [proposal_boxes[i] for i in range(len(proposal_boxes))]
+        object_feats = proposal_features
+        if self.with_bbox:
+            for stage in range(self.num_stages):
+                rois = bbox2roi(proposal_list)
+                bbox_results = self._bbox_forward(stage, x, rois, object_feats,
+                                                  img_metas)
+
+                all_stage_bbox_results.append(bbox_results)
+                proposal_list = bbox_results['detach_proposal_list']
+                object_feats = bbox_results['object_feats']
+        return all_stage_bbox_results
