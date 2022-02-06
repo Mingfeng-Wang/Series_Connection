@@ -65,7 +65,7 @@ class SparseSeriesRoIHead(SparseRoIHead):
         else:
             proposal_list = [torch.rand((1,4))] * num_imgs
             detach_proposal_list = proposal_list
-            
+
         bbox_results = dict(
             cls_score=cls_score,
             decode_bbox_pred=torch.cat(proposal_list),

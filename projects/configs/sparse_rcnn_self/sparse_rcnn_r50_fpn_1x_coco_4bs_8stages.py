@@ -1,8 +1,8 @@
 _base_ = [
-    '../_base_/datasets/coco_detection_8_local.py',
+    '../_base_/datasets/coco_detection_4_local.py',
     '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
 ]
-num_stages = 6
+num_stages = 8
 num_proposals = 100
 model = dict(
     type='SparseRCNN',
@@ -28,7 +28,7 @@ model = dict(
         num_proposals=num_proposals,
         proposal_feature_channel=256),
     roi_head=dict(
-        type='SparseSeriesRoIHead',
+        type='SparseRoIHead',
         num_stages=num_stages,
         stage_loss_weights=[1] * num_stages,
         proposal_feature_channel=256,
@@ -39,7 +39,7 @@ model = dict(
             featmap_strides=[4, 8, 16, 32]),
         bbox_head=[
             dict(
-                type='DIISeriesHead',
+                type='DIIHead',
                 num_classes=80,
                 num_ffn_fcs=2,
                 num_heads=8,
@@ -94,5 +94,6 @@ optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2), 
 lr_config = dict(policy='step', step=[8, 11])
 runner = dict(type='EpochBasedRunner', max_epochs=12)
 # fp16 settings
-# fp16 = dict(loss_scale=512.)
-checkpoint_config = dict(interval=6)
+#fp16 = dict(loss_scale=512.)
+checkpoint_config = dict(interval=2)
+work_dir = '/home/wmf/Github/workdir/debug'

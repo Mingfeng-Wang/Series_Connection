@@ -53,7 +53,7 @@ class DIISeriesHead(DIIHead):
 
         # FFN
         obj_feat = self.ffn_norm(self.ffn(obj_feat))
-    
+
         cls_feat = obj_feat
         if not final:
             reg_feat = obj_feat
@@ -154,4 +154,3 @@ class DIISeriesHead(DIIHead):
                 losses['loss_bbox'] = bbox_pred.sum() * 0
                 losses['loss_iou'] = bbox_pred.sum() * 0
         return losses
-

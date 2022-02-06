@@ -1,9 +1,9 @@
 _base_ = [
-    '../_base_/datasets/coco_detection_14pergpu_v100_featurize.py',
+    '../_base_/datasets/coco_detection_4_local.py',
     '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
 ]
-num_stages = 6
-num_proposals = 100
+num_stages = 8
+num_proposals = 300
 model = dict(
     type='SparseRCNN',
     backbone=dict(
@@ -89,9 +89,14 @@ model = dict(
 
 # optimizer
 optimizer = dict(_delete_=True, type='AdamW', lr=0.000025, weight_decay=0.0001)
-optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2))
+optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2), type='GradientCumulativeOptimizerHook', cumulative_iters=4)
 # learning policy
 lr_config = dict(policy='step', step=[8, 11])
 runner = dict(type='EpochBasedRunner', max_epochs=12)
 # fp16 settings
-fp16 = dict(loss_scale=512.)
+#fp16 = dict(loss_scale=512.)
+checkpoint_config = dict(interval=2)
+data = dict(
+    samples_per_gpu=2,
+    workers_per_gpu=4)
+work_dir = '/home/wmf/Github/workdir/sparse_rcnn_r50_fpn_1x_300_coco_4bs_8stages'

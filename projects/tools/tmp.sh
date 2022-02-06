@@ -1,0 +1,3 @@
+sh /home/wmf/Github/mmdetection/projects/tools/train.sh  projects/configs/sparse_rcnn_self/sparse_rcnn_r50_fpn_1x_coco_4bs_8stages.py
+sh /home/wmf/Github/mmdetection/projects/tools/dist_train.sh  projects/configs/sparse_rcnn_self/sparse_rcnn_r50_fpn_1x_coco_4bs_8stages.py 2
+python /home/wmf/Github/mmdetection/projects/tools/train.py  projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage.py --work-dir /home/wmf/Github/workdir/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage --gpu-ids 1

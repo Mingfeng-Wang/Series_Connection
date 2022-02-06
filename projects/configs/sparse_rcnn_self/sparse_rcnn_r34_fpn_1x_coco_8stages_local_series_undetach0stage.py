@@ -1,24 +1,24 @@
 _base_ = [
-    '../_base_/datasets/coco_detection_8_local.py',
+    '../_base_/datasets/coco_detection_4_local.py',
     '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
 ]
-num_stages = 6
+num_stages = 8
 num_proposals = 100
 model = dict(
     type='SparseRCNN',
     backbone=dict(
         type='ResNet',
-        depth=50,
+        depth=34,
         num_stages=4,
         out_indices=(0, 1, 2, 3),
         frozen_stages=1,
         norm_cfg=dict(type='BN', requires_grad=True),
         norm_eval=True,
         style='pytorch',
-        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet50')),
+        init_cfg=dict(type='Pretrained', checkpoint='torchvision://resnet34')),
     neck=dict(
         type='FPN',
-        in_channels=[256, 512, 1024, 2048],
+        in_channels=[64, 128, 256, 512],
         out_channels=256,
         start_level=0,
         add_extra_convs='on_input',
@@ -28,7 +28,7 @@ model = dict(
         num_proposals=num_proposals,
         proposal_feature_channel=256),
     roi_head=dict(
-        type='SparseRoIHead',
+        type='SparseSeriesRoIHeadUndetach0stage',
         num_stages=num_stages,
         stage_loss_weights=[1] * num_stages,
         proposal_feature_channel=256,
@@ -39,7 +39,7 @@ model = dict(
             featmap_strides=[4, 8, 16, 32]),
         bbox_head=[
             dict(
-                type='DIIHead',
+                type='DIISeriesHead',
                 num_classes=80,
                 num_ffn_fcs=2,
                 num_heads=8,
@@ -89,10 +89,10 @@ model = dict(
 
 # optimizer
 optimizer = dict(_delete_=True, type='AdamW', lr=0.000025, weight_decay=0.0001)
-optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2), type='GradientCumulativeOptimizerHook', cumulative_iters=8)
+optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2), type='GradientCumulativeOptimizerHook', cumulative_iters=2)
 # learning policy
 lr_config = dict(policy='step', step=[8, 11])
 runner = dict(type='EpochBasedRunner', max_epochs=12)
 # fp16 settings
-#fp16 = dict(loss_scale=512.)
-checkpoint_config = dict(interval=6)
+# fp16 = dict(loss_scale=512.)
+checkpoint_config = dict(interval=2)
