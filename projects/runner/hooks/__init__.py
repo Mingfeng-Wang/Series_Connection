@@ -1,5 +1,5 @@
-from .optimizer import GradientCumulativeOptimizerHook
+from .optimizer import GradientCumulativeOptimizerHook,GradientCumulativeFp16OptimizerHook
 
 __all__ = [
-    'GradientCumulativeOptimizerHook'
+    'GradientCumulativeOptimizerHook','GradientCumulativeFp16OptimizerHook'
 ]

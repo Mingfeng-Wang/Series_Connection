@@ -1,5 +1,5 @@
 _base_ = [
-    '../_base_/datasets/coco_detection_8_local.py',
+    '../_base_/datasets/coco_detection_4_local.py',
     '../_base_/schedules/schedule_1x.py', '../_base_/default_runtime.py'
 ]
 num_stages = 8

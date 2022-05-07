@@ -53,7 +53,6 @@ class DIISeriesHead(DIIHead):
 
         # FFN
         obj_feat = self.ffn_norm(self.ffn(obj_feat))
-
         cls_feat = obj_feat
         if not final:
             reg_feat = obj_feat
@@ -61,6 +60,7 @@ class DIISeriesHead(DIIHead):
                 reg_feat = reg_layer(reg_feat)
             bbox_delta = self.fc_reg(reg_feat).view(N, num_proposals, -1)
         else:
+            self.reg_fcs = None  # last stage, hard code   
             bbox_delta = None
 
         for cls_layer in self.cls_fcs:

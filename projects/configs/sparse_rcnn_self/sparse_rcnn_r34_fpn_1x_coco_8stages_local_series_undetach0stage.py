@@ -89,10 +89,14 @@ model = dict(
 
 # optimizer
 optimizer = dict(_delete_=True, type='AdamW', lr=0.000025, weight_decay=0.0001)
-optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2), type='GradientCumulativeOptimizerHook', cumulative_iters=2)
-# learning policy
 lr_config = dict(policy='step', step=[8, 11])
 runner = dict(type='EpochBasedRunner', max_epochs=12)
 # fp16 settings
 # fp16 = dict(loss_scale=512.)
-checkpoint_config = dict(interval=2)
+data = dict(
+    samples_per_gpu=4,
+    workers_per_gpu=8)
+optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2), type='GradientCumulativeOptimizerHook', cumulative_iters=4)
+work_dir =  '/home/wmf/Github/workdir/sparse_rcnn_r34_fpn_1x_coco_8stages_local_series_undetach0stage2'
+find_unused_parameters = True
+checkpoint_config = dict(interval=1)

@@ -100,9 +100,14 @@ def parse_args():
     if args.options:
         warnings.warn('--options is deprecated in favor of --eval-options')
         args.eval_options = args.options
-    args.config = '/media/wmf/E453334932D7B3C3/workdir/test/sparse_rcnn_r34_fpn_1x_coco_4stages_local_series.py'
-    args.checkpoint = '/home/wmf/workdir/sparse_rcnn_r34_fpn_1x_coco_4stages_series_local/epoch_12.pth'
+    args.config = 'win_workdir2/sparse_rcnn_r34_fpn_1x_coco_8stages_8bs_local_boxweights2.2_6_lr52.5/sparse_rcnn_r34_fpn_1x_coco_8stages_8bs_local_boxweights2.2_6_lr52.5.py'
+    args.checkpoint = 'win_workdir2/sparse_rcnn_r34_fpn_1x_coco_8stages_8bs_local_boxweights2.2_6_lr52.5/epoch_12.pth'
     args.eval = 'bbox'
+    args.fuse_conv_bn = True
+    args.show_dir = "projects/vis/baseline0.2/"
+    args.show_score_thr = 0.2
+    # args.gpu_collect = True
+    # args.out ='/media/wmf/E453334932D7B3C31/workdir/sparse_rcnn_r50_fpn_1x_coco_8bs_8stages_series_detach0/test_results.pkl'
     return args
 
 

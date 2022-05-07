@@ -85,13 +85,13 @@ def parse_args():
 
     #args.config = '/media/wmf/E453334932D7B3C3/Github/mmdetection/projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_4stages_local_series.py'
     #args.work_dir = '/media/wmf/E453334932D7B3C3/workdir/sparse_rcnn_r34_fpn_1x_coco_4stages_series_local'
-    args.config =  'projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage.py'
-    #args.work_dir = '/media/wmf/E453334932D7B3C31/workdir/debug'
+    args.config =  'projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_8stages_4bs_local_series_detach0stage_boxweights2.2_6_lr40.py'
+    args.work_dir = '/media/wmf/E453334932D7B3C31/workdir/debug'
     #args.work_dir = '../workdir/debug/'
     args.seed = 1334
     args.deterministic = True
-    args.resume_from = "../workdir/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage/epoch_5.pth"
-    #args.gpu_ids = range(1,2)
+    #args.resume_from = "../workdir/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage2/latest.pth"
+    args.gpu_ids = range(1,2)
     return args
 
 

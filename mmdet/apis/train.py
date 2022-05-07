@@ -5,7 +5,7 @@ import numpy as np
 import torch
 from mmcv.parallel import MMDataParallel, MMDistributedDataParallel
 from mmcv.runner import (HOOKS, DistSamplerSeedHook, EpochBasedRunner,
-                         Fp16OptimizerHook, OptimizerHook, build_optimizer,
+                         Fp16OptimizerHook, OptimizerHook, build_optimizer, 
                          build_runner)
 from mmcv.utils import build_from_cfg
 
@@ -116,6 +116,7 @@ def train_detector(model,
     if fp16_cfg is not None:
         optimizer_config = Fp16OptimizerHook(
             **cfg.optimizer_config, **fp16_cfg, distributed=distributed)
+        
     elif distributed and 'type' not in cfg.optimizer_config:
         optimizer_config = OptimizerHook(**cfg.optimizer_config)
     else:
@@ -164,7 +165,7 @@ def train_detector(model,
             runner.register_hook(hook, priority=priority)
 
     if cfg.resume_from:
-        runner.resume(cfg.resume_from)
+        runner.resume(cfg.resume_from, map_location='cpu')
     elif cfg.load_from:
         runner.load_checkpoint(cfg.load_from)
     runner.run(data_loaders, cfg.workflow)

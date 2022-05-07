@@ -95,4 +95,4 @@ lr_config = dict(policy='step', step=[8, 11])
 runner = dict(type='EpochBasedRunner', max_epochs=12)
 # fp16 settings
 # fp16 = dict(loss_scale=512.)
-checkpoint_config = dict(interval=4)
+checkpoint_config = dict(interval=1)

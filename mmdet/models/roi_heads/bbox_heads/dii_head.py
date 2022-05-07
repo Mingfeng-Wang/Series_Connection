@@ -106,6 +106,7 @@ class DIIHead(BBoxHead):
             self.fc_cls = nn.Linear(in_channels, self.num_classes + 1)
 
         self.reg_fcs = nn.ModuleList()
+        self.num_reg_fcs = num_reg_fcs
         for _ in range(num_reg_fcs):
             self.reg_fcs.append(
                 nn.Linear(in_channels, in_channels, bias=False))
@@ -185,11 +186,14 @@ class DIIHead(BBoxHead):
 
         for cls_layer in self.cls_fcs:
             cls_feat = cls_layer(cls_feat)
-        for reg_layer in self.reg_fcs:
-            reg_feat = reg_layer(reg_feat)
+        if self.num_reg_fcs != 0:
+            for reg_layer in self.reg_fcs:
+                reg_feat = reg_layer(reg_feat)
+            bbox_delta = self.fc_reg(reg_feat).view(N, num_proposals, -1)
+        else:
+            bbox_delta = torch.zeros((N, num_proposals, 4), device=reg_feat.device)
 
         cls_score = self.fc_cls(cls_feat).view(N, num_proposals, -1)
-        bbox_delta = self.fc_reg(reg_feat).view(N, num_proposals, -1)
 
         return cls_score, bbox_delta, obj_feat.view(N, num_proposals, -1)
 

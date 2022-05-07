@@ -1,11 +1,4 @@
-export OMP_NUM_THREADS=8
-#sh /home/wmf/Github/mmdetection/projects/tools/dist_train.sh  projects/configs/sparse_rcnn_self/sparse_rcnn_r50_fpn_1x_coco_8bs_10stages.py 2 --resume-from ../workdir/sparse_rcnn_r50_fpn_1x_coco_8bs_10stages/epoch_2.pth
-sh /home/wmf/Github/mmdetection/projects/tools/dist_train.sh  projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage.py 2 
-sh /home/wmf/Github/mmdetection/projects/tools/dist_train.sh  projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage.py 2 --resume-from ../workdir/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage2/latest.pth
-sh /home/wmf/Github/mmdetection/projects/tools/dist_train.sh  projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage.py 2 --resume-from ../workdir/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage2/latest.pth
-sh /home/wmf/Github/mmdetection/projects/tools/dist_train.sh  projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage.py 2 --resume-from ../workdir/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage2/latest.pth
-sh /home/wmf/Github/mmdetection/projects/tools/dist_train.sh  projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage.py 2 --resume-from ../workdir/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage2/latest.pth
-sh /home/wmf/Github/mmdetection/projects/tools/dist_train.sh  projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage.py 2 --resume-from ../workdir/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage2/latest.pth
-sh /home/wmf/Github/mmdetection/projects/tools/dist_train.sh  projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage.py 2 --resume-from ../workdir/sparse_rcnn_r34_fpn_1x_coco_300_8stages_local_series_detach0stage2/latest.pth
-#sh /home/wmf/Github/mmdetection/projects/tools/dist_train.sh  /media/wmf/E453334932D7B3C31/workdir/sparse_rcnn_r50_fpn_1x_coco_4bs_8stages/sparse_rcnn_r50_fpn_1x_coco_4bs_8stages.py 2
-#python projects/tools/train.py projects/configs/sparse_rcnn_self/sparse_rcnn_r50_fpn_1x_coco_8bs_10stages.py --gpu-ids 1 --resume-from ../workdir/sparse_rcnn_r50_fpn_1x_coco_8bs_10stages/epoch_1.pth
+#export OMP_NUM_THREADS=8
+#sleep 2h
+#python  projects/tools/train.py projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_6stages_8bs_local_series_detach0stage_boxweights2.2_6_lr50_nostep2.py --gpu-ids 1 --resume-from  ../workdir/sparse_rcnn_r34_fpn_1x_coco_6stages_8bs_local_series_detach0stage_boxweights2.2_6_lr50/epoch_11.pth
+python projects/tools/train.py projects/configs/sparse_rcnn_self/sparse_rcnn_r34_fpn_1x_coco_8stages_4bs_local_series_detach0stage_boxweights2.2_6_lr50_wd2.25.py --gpu-ids 0 #--resume-from  /home/wmf/Github/workdir/sparse_rcnn_r34_fpn_1x_coco_8stages_4bs_local_series_6reg_detach0stage_boxweights2.2_6_lr52.5/epoch_7.pth

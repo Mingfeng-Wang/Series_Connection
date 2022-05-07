@@ -163,7 +163,15 @@ def imshow_det_bboxes(img,
 
     stream, _ = canvas.print_to_buffer()
     buffer = np.frombuffer(stream, dtype='uint8')
-    img_rgba = buffer.reshape(height, width, 4)
+    if len(buffer)/width%4 == 0:
+        img_rgba = buffer.reshape(-1, width, 4)
+    elif len(buffer)/height%4 == 0:
+        img_rgba = buffer.reshape(height, -1, 4)
+    else:
+        target_len = 4 * height * width
+        assert len(buffer) < target_len
+        buffer = np.pad(buffer, (0, target_len-len(buffer)))
+        img_rgba = buffer.reshape(height, width, 4)
     rgb, alpha = np.split(img_rgba, [3], axis=2)
     img = rgb.astype('uint8')
     img = mmcv.rgb2bgr(img)

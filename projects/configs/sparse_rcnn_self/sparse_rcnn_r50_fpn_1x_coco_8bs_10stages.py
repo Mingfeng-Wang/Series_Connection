@@ -89,7 +89,7 @@ model = dict(
 
 # optimizer
 optimizer = dict(_delete_=True, type='AdamW', lr=0.000025, weight_decay=0.0001)
-optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2), type='GradientCumulativeOptimizerHook', cumulative_iters=4)
+optimizer_config = dict(_delete_=True, grad_clip=dict(max_norm=1, norm_type=2), type='GradientCumulativeOptimizerHook', cumulative_iters=8)
 # learning policy
 lr_config = dict(policy='step', step=[8, 11])
 runner = dict(type='EpochBasedRunner', max_epochs=12)
@@ -99,4 +99,4 @@ checkpoint_config = dict(interval=1)
 work_dir = '/home/wmf/Github/workdir/sparse_rcnn_r50_fpn_1x_coco_8bs_10stages'
 data = dict(
     samples_per_gpu=2,
-    workers_per_gpu=4)
+    workers_per_gpu=2)
